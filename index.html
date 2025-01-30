@@ -1,70 +1,129 @@
 <!DOCTYPE html>
+
 <html>
+
 <head>
-  <title>Camera Access</title>
-  <style>
-    #video {
-      width: 640px;
-      height: 480px;
-      border: 1px solid black;
-    }
-  </style>
-  <script src="https://apis.google.com/js/api.js"></script>
-  <script src="https://apis.google.com/js/platform.js"></script>
+
+<title>Camera Access</title>
+
+<style>
+
+#video {
+
+width: 640px;
+
+height: 480px;
+
+border: 1px solid black;
+
+}
+
+</style>
+
 </head>
+
 <body>
-  <h1>Camera Test</h1>
-  <video id="video" autoplay></video>
-  <button id="start-button">Start Camera</button>
-  <button id="stop-button">Stop Camera</button>
-  <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
-  <button id="capture-button">Capture Image</button>
-  <img id="captured-image" alt="Captured Image" style="display:none;">
-  <button onclick="handleClientLoad()">Sign in with Google</button>
 
-  <script>
-    const video = document.getElementById('video');
-    const startButton = document.getElementById('start-button');
-    const stopButton = document.getElementById('stop-button');
-    const captureButton = document.getElementById('capture-button');
-    const canvas = document.getElementById('canvas');
-    const capturedImage = document.getElementById('captured-image');
-    let stream = null;
 
-    startButton.addEventListener('click', async () => {
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        video.srcObject = stream;
-      } catch (err) {
-        console.error('Error accessing camera:', err);
-        alert('Error accessing camera. Please check permissions.');
-      }
-    });
 
-    stopButton.addEventListener('click', () => {
-      if (stream) {
-        const tracks = stream.getTracks();
-        tracks.forEach(track => track.stop());
-        video.srcObject = null;
-        stream = null;
-      }
-    });
+<h1>Camera Test</h1>
 
-    captureButton.addEventListener('click', () => {
-      if (video.videoWidth > 0 && video.videoHeight > 0) {
-        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-        const imageData = canvas.toDataURL('image/png'); // or 'image/jpeg'
 
-        // Convert imageData URL to Blob
-        fetch(imageData)
-          .then(res => res.blob())
-          .then(blob => {
-            uploadToDrive(blob); // Upload the captured photo as a Blob to Google Drive
-          });
-      }
-    });
 
-    
-  </script>
+<video id="video" autoplay></video>
+
+<button id="start-button">Start Camera</button>
+
+<button id="stop-button">Stop Camera</button>
+
+<canvas id="canvas" width="640" height="480" style="display:none;"></canvas> <button id="capture-button">Capture Image</button>
+
+<img id="captured-image" alt="Captured Image" style="display:none;">
+
+
+
+<script>
+
+const video = document.getElementById('video');
+
+const startButton = document.getElementById('start-button');
+
+const stopButton = document.getElementById('stop-button');
+
+const captureButton = document.getElementById('capture-button');
+
+const canvas = document.getElementById('canvas');
+
+const capturedImage = document.getElementById('captured-image');
+
+let stream = null;
+
+
+
+startButton.addEventListener('click', async () => {
+
+try {
+
+stream = await navigator.mediaDevices.getUserMedia({ video: true });
+
+video.srcObject = stream;
+
+} catch (err) {
+
+console.error('Error accessing camera:', err);
+
+alert('Error accessing camera. Please check permissions.');
+
+}
+
+});
+
+
+
+stopButton.addEventListener('click', () => {
+
+if (stream) {
+
+const tracks = stream.getTracks();
+
+tracks.forEach(track => track.stop());
+
+video.srcObject = null;
+
+stream = null;
+
+}
+
+});
+
+
+
+captureButton.addEventListener('click', () => {
+
+if (video.videoWidth > 0 && video.videoHeight > 0) {
+
+canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+
+const dataURL = canvas.toDataURL('image/png'); // or 'image/jpeg'
+
+
+
+capturedImage.src = dataURL;
+
+capturedImage.style.display = 'block'; // Show the image
+
+}
+
+});
+
+
+
+
+
+</script>
+
+
+
 </body>
+
 </html>
